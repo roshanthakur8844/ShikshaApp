@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiksha App Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #welcome-container, #quiz-container, #developer-info {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .question-container {
+            margin-bottom: 15px;
+        }
+
+        .option {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #2980b9;
+        }
+
+        .result, .Score {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="welcome-container">
+        <h1>Welcome to Shiksha App Quiz!</h1>
+        <p>Instructions: Answer the following questions to find the best department suitable for you.</p>
+        <button onclick="startQuiz()">Start</button>
+    </div>
+
+    <div id="quiz-container">
+        <div id="question-container" class="question-container"></div>
+        <div id="options-container" class="question-container"></div>
+        <button id="next" style="display: none;" onclick="next()">Next</button>
+        <div class="result"></div>
+        <div class="Score"></div>
+    </div>
+
+    <!-- Developer Information Section -->
+    <div id="developer-info">
+        <h2>Developer Information</h2>
+        <p>Quiz developed by : Roshan Thakur</p>
+        <p>This is a Part of Capstone Project </p>
+        <p>paper ID 
+“IRJMETS60100070155”</p><!-- Add any other relevant information -->
+    </div>
+
+    <script>
+        const quizData = {
+    Questions: [
+        // ... (as provided in the question)
+        {
+            Question: "What hardware component performs calculations and logic operations?",
+            Options: ["a) Motherboard", "b) RAM", "c) CPU ", "d) Hard Drive"],
+            Department: 'Computer Engineering',
+            "Correct answer is": "c) CPU"
+        },
+        {
+            Question: "Which programming language is known for its simplicity and web development focus?",
+            Options: ["a) C++", "b) Python ", "c) Java", "d) Ruby"],
+            Department: 'Computer Engineering',
+            "Correct answer is": "b) Python"
+        },
+        {
+            Question: "What data structure allows for efficient insertion and deletion at both ends?",
+            Options: ["a) Array", "b) Queue", "c) Stack", "d) Linked List "],
+            Department: 'Computer Engineering',
+            "Correct answer is": "d) Linked List"
+        },
+        {
+            Question: "What does HTML stand for?",
+            Options: ["a) Hypertext Markup Language", "b) High Tech Markup Language", "c) Hierarchical Text Markup Language", "d) Homepage Text Markup Language"],
+            Department: 'Computer Engineering',
+            "Correct answer is": "a) Hypertext Markup Language"
+        },
+        // Mechanical Engineering
+        {
+            Question: "What principle states that the total energy of a closed system remains constant?",
+            Options: ["a) Archimedes’ Principle", "b) Pascal’s Principle", "c) Conservation of Energy ", "d) Bernoulli’s Principle"],
+            Department: 'Mechanical Engineering',
+            "Correct answer is": "c) Conservation of Energy"
+        },
+        {
+            Question: "Which type of gear mechanism changes the direction of rotation?",
+            Options: ["a) Spur gear", "b) Bevel gear ", "c) Worm gear", "d) Helical gear"],
+            Department: 'Mechanical Engineering',
+            "Correct answer is": "b) Bevel gear"
+        },
+        {
+            Question: "What material is known for its high strength and resistance to corrosion?",
+            Options: ["a) Aluminum", "b) Copper", "c) Stainless Steel ", "d) Plastic"],
+            Department: 'Mechanical Engineering',
+            "Correct answer is": "c) Stainless Steel"
+        },
+        {
+            Question: "What is the primary function of a piston ring?",
+            Options: ["a) Seal the combustion chamber ", "b) Cool the engine", "c) Connect the piston to the crankshaft", "d) Lubricate the cylinder walls"],
+            Department: 'Mechanical Engineering',
+            "Correct answer is": "a) Seal the combustion chamber"
+        },
+        // Electrical and Electronics Engineering
+        {
+            Question: "What unit measures the flow of electric charge?",
+            Options: ["a) Volt", "b) Ampere ", "c) Ohm", "d) Watt"],
+            Department: 'Electrical and Electronics Engineering',
+            "Correct answer is": "b) Ampere"
+        },
+        {
+            Question: "Which device converts alternating current (AC) to direct current (DC)?",
+            Options: ["a) Capacitor", "b) Transistor", "c) Transformer", "d) Rectifier "],
+            Department: 'Electrical and Electronics Engineering',
+            "Correct answer is": "d) Rectifier"
+        },
+        {
+            Question: "What is the color code for neutral wires in electrical systems?",
+            Options: ["a) Red", "b) White", "c) Black", "d) Green"],
+            Department: 'Electrical and Electronics Engineering',
+            "Correct answer is": "b) White"
+        },
+        {
+            Question: "What does LED stand for?",
+            Options: ["a) Light Emitting Diode ", "b) Liquid Emitting Diode", "c) Laser Emitting Diode", "d) Low Energy Diode"],
+            Department: 'Electrical and Electronics Engineering',
+            "Correct answer is": "a) Light Emitting Diode"
+        },
+        // Civil Engineering
+        {
+            Question: "What type of foundation is best suited for soft soil conditions?",
+            Options: ["a) Strip foundation", "b) Raft foundation ", "c) Pile foundation", "d) Spread footing"],
+            Department: 'Civil Engineering',
+            "Correct answer is": "b) Raft foundation"
+        },
+        {
+            Question: "Which material is the main component of Portland cement?",
+            Options: ["a) Sand", "b) Gravel", "c) Calcium hydroxide", "d) Asphalt"],
+            Department: 'Civil Engineering',
+            "Correct answer is": "c) Calcium hydroxide"
+        },
+        {
+            Question: "What do beams primarily resist in a structure?",
+            Options: ["a) Axial loads", "b) Shear forces", "c) Bending moments ", "d) Compressive stresses"],
+            Department: 'Civil Engineering',
+            "Correct answer is": "c) Bending moments"
+        },
+        {
+            Question: "What is the process of adding strength and reinforcement to concrete?",
+            Options: ["a) Curing", "b) Setting", "c) Rebarring", "d) Mixing"],
+            Department: 'Civil Engineering',
+            "Correct answer is": "c) Rebarring"
+        }
+    ]
+};
+
+        let question = document.querySelector("#question-container");
+        let OPTIONS = document.querySelector("#options-container");
+        let questionIndex = 0;
+        let questionNo = 0;
+        let QuesObject;
+        let result = document.querySelector(".result");
+        let Score = document.querySelector(".Score");
+        let score = 0;
+        let nextBtn = document.getElementById("next");
+
+        function startQuiz() {
+            nextBtn.style.display = "none";
+            result.innerHTML = "<h4>Please Click ONE OPTION Only</h4>";
+            QuesObject = quizData.Questions[questionIndex];
+            console.log(QuesObject);
+            question.textContent = (questionNo + 1) + ".  " + QuesObject.Question;
+
+            QuesObject.Options.forEach((option, index) => {
+                const DivElement = document.createElement("div");
+                DivElement.className = "option";
+                DivElement.textContent = option;
+                DivElement.addEventListener("click", () => {
+                    click(index, DivElement);
+                });
+
+                OPTIONS.appendChild(DivElement);
+            });
+        }
+
+        function click(index, DivElement) {
+            const userAnswer = index;
+            const correctAnswerIndex = QuesObject.Options.findIndex(option => option.includes(QuesObject["Correct answer is"]));
+            if (userAnswer === correctAnswerIndex) {
+                score++;
+                DivElement.style.backgroundColor = "#2ecc71"; // Green for correct answer
+            } else {
+                DivElement.style.backgroundColor = "#e74c3c"; // Red for incorrect answer
+            }
+
+            // Disable further clicks on options
+            OPTIONS.querySelectorAll('.option').forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+
+            nextBtn.style.display = "block";
+        }
+
+        function next() {
+            // Clear previous question and options
+            question.textContent = "";
+            OPTIONS.innerHTML = "";
+
+            // Move to the next question
+            questionIndex++;
+            questionNo++;
+
+            if (questionIndex < quizData.Questions.length) {
+                startQuiz();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            const userScore = score;
+            const departments = quizData.Questions.map(q => q.Department);
+            const maxScore = quizData.Questions.length;
+
+            if (userScore >= 0 && userScore <= maxScore) {
+                const resultDepartment = departments[userScore];
+                alert(`Based on your answers, the suggested department for you is: ${resultDepartment}`);
+                // You can customize this to display the result on the webpage or redirect to a new page.
+            } else {
+                // Default case
+                alert("Undecided");
+            }
+        }
+
+        function findResultDepartment() {
+            const userScore = score;
+
+            if (userScore >= 0 && userScore <= 5) {
+                return "Civil Engineering";
+            } else if (userScore > 5 && userScore <= 10) {
+                return "Mechanical Engineering";
+            } else if (userScore > 10 && userScore <= 15) {
+                return "Electrical and Electronics Engineering";
+            } else if (userScore > 15 && userScore <= 20) {
+                return "Computer Engineering";
+            } else {
+                // Default case
+                return "Undecided";
+            }
+        }
+    </script>
+</body>
+</html>
