@@ -72,6 +72,7 @@
         <button id="next" style="display: none;" onclick="next()">Next</button>
         <div class="result"></div>
         <div class="Score"></div>
+        <div id="count" class="count"></div> <!-- Added this div for displaying count -->
     </div>
 
     <!-- Developer Information Section -->
@@ -182,7 +183,7 @@
         },
         {
             Question: "What is the process of adding strength and reinforcement to concrete?",
-            Options: ["a) Curing", "b) Setting", "c) Rebarring", "d) Mixing"],
+            Options: ["a) Curing", "b) Setting", "c) Rebarring ", "d) Mixing"],
             Department: 'Civil Engineering',
             "Correct answer is": "c) Rebarring"
         }
@@ -198,6 +199,12 @@
         let Score = document.querySelector(".Score");
         let score = 0;
         let nextBtn = document.getElementById("next");
+        let departmentCounts = {
+            "Computer Engineering": 0,
+            "Mechanical Engineering": 0,
+            "Electrical and Electronics Engineering": 0,
+            "Civil Engineering": 0
+        };
 
         function startQuiz() {
             nextBtn.style.display = "none";
@@ -224,6 +231,8 @@
             if (userAnswer === correctAnswerIndex) {
                 score++;
                 DivElement.style.backgroundColor = "#2ecc71"; // Green for correct answer
+                // Update department count
+                departmentCounts[QuesObject.Department]++;
             } else {
                 DivElement.style.backgroundColor = "#e74c3c"; // Red for incorrect answer
             }
@@ -234,6 +243,10 @@
             });
 
             nextBtn.style.display = "block";
+
+            // Update count
+            const countDiv = document.getElementById("count");
+            countDiv.textContent = `You got ${score} out of ${quizData.Questions.length} questions correct.`;
         }
 
         function next() {
@@ -254,33 +267,26 @@
 
         function showResult() {
             const userScore = score;
-            const departments = quizData.Questions.map(q => q.Department);
             const maxScore = quizData.Questions.length;
 
-            if (userScore >= 0 && userScore <= maxScore) {
-                const resultDepartment = departments[userScore];
-                alert(`Based on your answers, the suggested department for you is: ${resultDepartment}`);
-                // You can customize this to display the result on the webpage or redirect to a new page.
-            } else {
-                // Default case
-                alert("Undecided");
+            const countDiv = document.getElementById("count");
+            countDiv.textContent = `You got ${userScore} out of ${maxScore} questions correct.`;
+
+            // Find the department with the highest count
+            let maxCount = 0;
+            let resultDepartment = "Undecided";
+
+            for (let department in departmentCounts) {
+                if (departmentCounts[department] > maxCount) {
+                    maxCount = departmentCounts[department];
+                    resultDepartment = department;
+                }
             }
-        }
 
-        function findResultDepartment() {
-            const userScore = score;
-
-            if (userScore >= 0 && userScore <= 5) {
-                return "Civil Engineering";
-            } else if (userScore > 5 && userScore <= 10) {
-                return "Mechanical Engineering";
-            } else if (userScore > 10 && userScore <= 15) {
-                return "Electrical and Electronics Engineering";
-            } else if (userScore > 15 && userScore <= 20) {
-                return "Computer Engineering";
+            if (resultDepartment !== "Undecided") {
+                alert(`Based on your answers, the suggested department for you is: ${resultDepartment}`);
             } else {
-                // Default case
-                return "Undecided";
+                alert("Undecided");
             }
         }
     </script>
