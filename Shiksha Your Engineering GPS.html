@@ -7,81 +7,195 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f8f9fa;
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://source.unsplash.com/featured/?education');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #fff;
+            text-align: center;
+            transition: background-image 0.5s ease;
         }
 
-        #welcome-container, #quiz-container, #developer-info {
+        #quiz-container {
             max-width: 600px;
-            margin: 20px auto;
-            background-color: #fff;
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1, h2, p {
+            margin-top: 0;
         }
 
         button {
-            background-color: #3498db;
+            background-color: #007bff;
             color: #fff;
             padding: 10px 20px;
             font-size: 16px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #2980b9;
+            background-color: #0056b3;
         }
 
         .question-container {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            animation: bounceInLeft 1s ease;
         }
 
         .option {
-            background-color: #3498db;
+            background-color: #007bff;
             color: #fff;
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
+            animation: bounceInRight 1s ease;
         }
 
         .option:hover {
-            background-color: #2980b9;
+            background-color: #0056b3;
         }
 
         .result, .Score {
             font-weight: bold;
             margin-top: 15px;
+            color: #fff;
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+
+        .correct-answer {
+            background-color: #2ecc71 !important; /* Green for correct answer */
+            animation: pulse 1s ease;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        #count {
+            display: none;
+        }
+
+        /* Developer Information Section */
+        #developer-info {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            text-align: left;
+            display: none;
+            animation: fadeInUp 1s ease;
+        }
+
+        #developer-info h2 {
+            color: #ffc107;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        #developer-info p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* About Button */
+        #about-button {
+            background-color: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        #about-button:hover {
+            background-color: #fff;
+            color: #007bff;
+        }
+
+        /* Fun animations */
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            10%, 30%, 50%, 70%, 90% {
+                transform: translateX(-10px);
+            }
+            20%, 40%, 60%, 80% {
+                transform: translateX(10px);
+            }
+        }
+
+        .fun-animation {
+            animation: shake 0.5s ease;
         }
     </style>
 </head>
 <body>
-    <div id="welcome-container">
+    <div id="quiz-container">
         <h1>Welcome to Shiksha App Quiz!</h1>
         <p>Instructions: Answer the following questions to find the best department suitable for you.</p>
-        <button onclick="startQuiz()">Start</button>
-    </div>
+        <button id="start-button" onclick="startQuiz()">Start</button>
 
-    <div id="quiz-container">
         <div id="question-container" class="question-container"></div>
         <div id="options-container" class="question-container"></div>
         <button id="next" style="display: none;" onclick="next()">Next</button>
         <div class="result"></div>
-        <div class="Score"></div>
-        <div id="count" class="count"></div> <!-- Added this div for displaying count -->
-    </div>
+        <div class="Score" style="display: none;"></div>
+        <div id="count" class="count" style="display: none;"></div> <!-- Added this div for displaying count -->
 
-    <!-- Developer Information Section -->
-    <div id="developer-info">
-        <h2>Developer Information</h2>
-        <p>Quiz developed by : Roshan Thakur</p>
-        <p>This is a Part of Capstone Project </p>
-        <p>paper ID 
-“IRJMETS60100070155”</p><!-- Add any other relevant information -->
+        <!-- Developer Information Section -->
+        <div id="developer-info">
+            <h2>Developer Information</h2>
+            <p>Quiz developed by: Roshan Thakur</p>
+            <p>This is a part of Capstone Project</p>
+            <p>Paper ID “IRJMETS60100070155”</p><!-- Add any other relevant information -->
+        </div>
+
+        <!-- About Button -->
+        <button id="about-button" onclick="toggleDeveloperInfo()">About</button>
     </div>
 
     <script>
@@ -190,6 +304,7 @@
     ]
 };
 
+
         let question = document.querySelector("#question-container");
         let OPTIONS = document.querySelector("#options-container");
         let questionIndex = 0;
@@ -206,11 +321,30 @@
             "Civil Engineering": 0
         };
 
+        // Array of educational wallpapers
+        const wallpapers = [
+            'https://source.unsplash.com/featured/?education',
+            'https://source.unsplash.com/featured/?study',
+            'https://source.unsplash.com/featured/?school',
+            'https://source.unsplash.com/featured/?learning',
+        ];
+
+        function changeBackground() {
+            const randomIndex = Math.floor(Math.random() * wallpapers.length);
+            document.body.style.backgroundImage = `url('${wallpapers[randomIndex]}')`;
+        }
+
+        function shuffleQuestions() {
+            for (let i = quizData.Questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [quizData.Questions[i], quizData.Questions[j]] = [quizData.Questions[j], quizData.Questions[i]];
+            }
+        }
+
         function startQuiz() {
-            nextBtn.style.display = "none";
+            document.getElementById("start-button").style.display = "none";
             result.innerHTML = "<h4>Please Click ONE OPTION Only</h4>";
             QuesObject = quizData.Questions[questionIndex];
-            console.log(QuesObject);
             question.textContent = (questionNo + 1) + ".  " + QuesObject.Question;
 
             QuesObject.Options.forEach((option, index) => {
@@ -230,11 +364,16 @@
             const correctAnswerIndex = QuesObject.Options.findIndex(option => option.includes(QuesObject["Correct answer is"]));
             if (userAnswer === correctAnswerIndex) {
                 score++;
-                DivElement.style.backgroundColor = "#2ecc71"; // Green for correct answer
+                DivElement.classList.add('correct-answer'); // Add correct answer animation
                 // Update department count
                 departmentCounts[QuesObject.Department]++;
+                // Automatically move to the next question after 1 second
+                setTimeout(() => {
+                    next();
+                }, 1000);
             } else {
                 DivElement.style.backgroundColor = "#e74c3c"; // Red for incorrect answer
+                DivElement.classList.add('fun-animation'); // Add fun animation for wrong answer
             }
 
             // Disable further clicks on options
@@ -271,6 +410,7 @@
 
             const countDiv = document.getElementById("count");
             countDiv.textContent = `You got ${userScore} out of ${maxScore} questions correct.`;
+            countDiv.style.display = "block";
 
             // Find the department with the highest count
             let maxCount = 0;
@@ -284,11 +424,33 @@
             }
 
             if (resultDepartment !== "Undecided") {
-                alert(`Based on your answers, the suggested department for you is: ${resultDepartment}`);
+                setTimeout(() => {
+                    alert(`Based on your answers, the suggested department for you is: ${resultDepartment}`);
+                }, 1000);
             } else {
-                alert("Undecided");
+                setTimeout(() => {
+                    alert("Undecided");
+                }, 1000);
             }
         }
+
+        // Function to show or hide developer information
+        function toggleDeveloperInfo() {
+            const developerInfo = document.getElementById("developer-info");
+            const aboutButton = document.getElementById("about-button");
+
+            if (developerInfo.style.display === "block") {
+                developerInfo.style.display = "none";
+                aboutButton.textContent = "About";
+            } else {
+                developerInfo.style.display = "block";
+                aboutButton.textContent = "Hide Info";
+            }
+        }
+
+        // Call changeBackground and shuffleQuestions on page load
+        changeBackground();
+        shuffleQuestions();
     </script>
 </body>
 </html>
